@@ -118,6 +118,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs customization from built-in system
 (setq custom-file "~/.emacs.d/custom.el")
-
+(load-file custom-file)
 
 (provide 'bnb-init)
