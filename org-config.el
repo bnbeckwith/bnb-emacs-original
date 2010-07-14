@@ -1,9 +1,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org-mode
 
+(setq bnb-org-location "~/elisp/org-mode/")
+
 ;; Tell emacs where to find it and when to start it
-(add-to-list 'load-path (expand-file-name "~/elisp/org-mode/lisp"))
-(add-to-list 'load-path (expand-file-name "~/elisp/org-mode/contrib/lisp"))
+(add-to-list 'load-path (expand-file-name (concat bnb-org-location "lisp/"))
+(add-to-list 'load-path (expand-file-name (concat bnb-org-location "contrib/lisp")))
 ;; .org .org_archive and .org.gpg files are org-mode files
 (add-to-list 'auto-mode-alist '("\\.org\\(.gpg|_archive\\)?$" . org-mode))
 
@@ -18,7 +20,7 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 (global-set-key (kbd "<f12>") 'org-agenda)
 (global-set-key (kbd "<f9> I") 
-		'(lambda () (interactive) (info "~/.emacs.d/org/org-mode/doc/org")))
+		'(lambda () (interactive) (info (concat bnb-org-location "doc/org"))))
 (global-set-key (kbd "<f9> v") 'visible-mode)
 (global-set-key (kbd "<f9> i") 'bnb/clock-in)
 (global-set-key (kbd "<f9> o") 'bnb/clock-out)
