@@ -4,9 +4,9 @@
 (setq bnb-org-location "~/elisp/org-mode/")
 
 ;; Tell emacs where to find it and when to start it
-(add-to-list 'load-path (expand-file-name (concat bnb-org-location "lisp/"))
+(add-to-list 'load-path (expand-file-name (concat bnb-org-location "lisp/")))
 (add-to-list 'load-path (expand-file-name (concat bnb-org-location "contrib/lisp")))
-;; .org .org_archive and .org.gpg files are org-mode files
+	     ;; .org .org_archive and .org.gpg files are org-mode files
 (add-to-list 'auto-mode-alist '("\\.org\\(.gpg|_archive\\)?$" . org-mode))
 
 ; Install org-mode
