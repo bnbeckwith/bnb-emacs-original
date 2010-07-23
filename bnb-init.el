@@ -93,15 +93,6 @@
 (add-hook 'cperl-mode-hook 'turn-on-eldoc-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; YASnippet
-;; http://code.google.com/p/yasnippet/
-(add-to-list 'load-path
-	     "~/.emacs.d/plugins/yasnippet-0.6.1c")
-(require 'yasnippet)
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/plugins/yasnippet-0.6.1c/snippets")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; EasyPG
 (require 'epa)
 (epa-file-enable)
