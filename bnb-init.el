@@ -78,6 +78,7 @@
   "Major mode for editing documents in Wikipedia markup." t)
 (add-to-list 'auto-mode-alist
              '("wiki\\.pdx\\.intel\\.com" . wikipedia-mode))
+(add-hook 'wikipedia-mode-hook 'orgtbl-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Show Paren mode
