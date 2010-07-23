@@ -98,11 +98,6 @@
 (epa-file-enable)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Weblogger
-;;(add-to-list 'load-path "~/.emacs.d/weblogger/")
-;;(require 'weblogger)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; To Consider:
 ;;  - par-edit (lisp editing)
 ;;  - hl-line
