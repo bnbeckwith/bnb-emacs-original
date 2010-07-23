@@ -1,11 +1,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org-mode
 
-(setq bnb-org-location "~/elisp/org-mode/")
+
+;;;;;
+;; ORG INSTALLATION
+;;;;;
+(setq bnb-org-location (concat bnb-elisp-dir "org-mode/"))
 
 ;; Tell emacs where to find it and when to start it
-(add-to-list 'load-path (expand-file-name (concat bnb-org-location "lisp/")))
-(add-to-list 'load-path (expand-file-name (concat bnb-org-location "contrib/lisp")))
+(add-to-list 'load-path (expand-file-name (concat bnb-org-location "lisp/")) 'prepend)
+(add-to-list 'load-path (expand-file-name (concat bnb-org-location "contrib/lisp")) 'prepend)
 	     ;; .org .org_archive and .org.gpg files are org-mode files
 (add-to-list 'auto-mode-alist '("\\.org\\(.gpg|_archive\\)?$" . org-mode))
 
@@ -13,10 +17,75 @@
 (require 'org-install)
 (require 'org-protocol)
 
+;; setup some hooks.
+(add-hook 'org-mode-hook
+	  (lambda ()
+	    ;; Keybindings
+	    (local-set-key "\M-I" 'org-toggle-iimage-in-org)
+	    ;; Turn on flyspell mode
+					;(flyspell-mode 1)
+	    ))
+(add-hook 'bnb/really-kill-emacs-hooks 'org-save-all-org-buffers 'append)
+
+;;;;;
+;; ORG MISCELLANEOUS
+;;;;;
+
+;; Add the installed info directory to the Info list
+(add-to-list 'Info-default-directory-list (concat bnb-org-location "doc/org"))
+
+;; Save all of my org-buffers every hour.
+(run-at-time "00:59" 3600 'org-save-all-org-buffers)
+
+;; Setup applications to use to open links.
+(setq org-file-apps 
+      (quote ((auto-mode . emacs) 
+	      ("\\.x?html?\\'" . default) 
+	      ("\\.pdf\\'" . default) 
+	      ("\\.mm\\'" . default))))
+
+;; Use the same interface as REFILE when using org-goto
+(setq org-goto-interface (quote outline-path-completion))
+
+;; supersize the C-k on headlines
+(setq org-special-ctrl-k t)
+
+;; Use IDO mode for selections
+(setq org-completion-use-ido t)
+;; Recommended to turn this off when IDO is enabled.
+(setq org-outline-path-complete-in-steps nil)
+
+;; Auto-revert mode.  This will be useful once the orgfiles are in git
+;; repos.
+(setq global-auto-revert-mode t)
+
+;; When should org leave a blank line before an item?
+(setq org-blank-before-new-entry (quote ((heading)
+ 					 (plain-list-item))))
+
+;; Hide the leading stars so that we aren't seeing stars.
+(setq org-hide-leading-stars t)
+
+;; Do NOT use odd-levels only (this is the default, but let's be
+;; explicit)
+(setq org-odd-levels-only nil)
+
+;; Do NOT put empty lines between collapsed trees
+(setq org-cycle-separator-lines 0)
+
+;; Do NOT reverse note order
+(setq org-reverse-note-order nil)
+
+;; Insert new heading after the current subtree.
+(setq org-insert-heading-respect-content t)
+
+;;;;
+;; ORG KEYS
+;;;;
 ; Set up some keystrokes
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cr" 'org-remember)
+(global-set-key "\C-cr" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 (global-set-key (kbd "<f12>") 'org-agenda)
 (global-set-key (kbd "<f9> I") 
@@ -28,12 +97,32 @@
 (global-set-key (kbd "<f11> g") 'org-clock-goto)
 (global-set-key (kbd "<f5> s") 'flyspell-buffer)
 
-;; EXPERIMENTAL
 
+;; Speed commands are used when on the * of a given headline.  If
+;; these are forgotten, just press '?' as a speed-command to bring up
+;; the cheat-sheet.
+(setq org-use-speed-commands t)
+(setq org-speed-commands-user (quote (("0" . delete-window)
+				      ("1" . delete-other-windows)
+				      ("2" . split-window-vertically)
+				      ("3" . split-window-horizontally)
+				      ("h" . hide-other)
+				      ("k" . org-kill-node-or-show-branches)
+				      ("R" . org-reveal)
+				      ("s" . org-save-all-org-buffers)
+				      ("z" . org-add-note)
+				      ("N" . org-narrow-to-subtree)
+				      ("W" . widen))))
 
-(setq org-todo-keywords (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
-				 (sequence "WAITING(w@/!)" "SOMEDAY(s!)" "|" "CANCELED(c@/!)")
-				 (sequence "OPEN(O)" "|" "CLOSED(C)"))))
+;;;;
+;; ORG TODO
+;;;;
+
+;; Setup the TODO keyword sequences.
+(setq org-todo-keywords 
+      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d!/!)")
+	      (sequence "WAITING(w@/!)" "SOMEDAY(s!)" "|" "CANCELED(c@/!)")
+	      (sequence "OPEN(O)" "|" "CLOSED(C)"))))
 
 (setq org-todo-keyword-faces (quote (("TODO" :foreground "red" :weight bold)
  ("NEXT" :foreground "blue" :weight bold)
@@ -65,65 +154,78 @@
                ("WAITING")
                ("CANCELED")))))
 
-;;;  Load Org Remember Stuff
-(require 'remember)
-(org-remember-insinuate)
-
-;; Start clock in a remember buffer and switch back to previous clocking task on save
-(add-hook 'remember-mode-hook 'org-clock-in 'append)
-(add-hook 'org-remember-before-finalize-hook 'bnb/clock-in-interrupted-task)
-
-;; I use C-M-r to start org-remember
-(global-set-key (kbd "C-M-r") 'org-remember)
-
-;; Keep clocks running
-(setq org-remember-clock-out-on-exit nil)
-
-;; C-c C-c stores the note immediately
-(setq org-remember-store-without-prompt t)
-
-;; I don't use this -- but set it in case I forget to specify a location in a future template
-(setq org-remember-default-headline "Tasks")
-
-;; 3 remember templates for TODO tasks, Notes, and Phone calls
-(setq org-remember-templates (quote (("todo" ?t "* TODO %?\n  %U\n  %a" nil bottom nil)
-                                     ("note" ?n "* %?                                                                            :NOTE:\n  %U\n  %a\n  :CLOCK:\n  :END:" nil bottom nil)
-;                                     ("appointment" ?a "* %?\n  %U" "~/git/org/todo.org" "Appointments" nil)
-                                     ("org-protocol" ?w "* TODO Review %c%!\n  %U" nil bottom nil))))
-
-(defun bnb/remove-empty-drawer-on-clock-out ()
-  (interactive)
-  (save-excursion
-    (beginning-of-line 0)
-    (org-remove-empty-drawer-at "CLOCK" (point))))
-
-(add-hook 'org-clock-out-hook 'bnb/remove-empty-drawer-on-clock-out 'append)
-
-
-(setq org-agenda-show-inherited-tags t)
-;(setq org-agenda-skip-scheduled-if-done t)
+;; Settings for enforcing TODO constraints
 (setq org-enforce-todo-checkbox-dependencies t)
 (setq org-enforce-todo-dependencies t)
-(setq org-export-html-inline-images t)
-(setq org-export-with-LaTeX-fragments t)
-(setq org-file-apps (quote ((auto-mode . emacs) ("\\.x?html?\\'" . default) ("\\.pdf\\'" . default) ("\\.mm\\'" . default))))
-(setq org-goto-interface (quote outline-path-completion))
-(setq org-log-done (quote note))
-(setq org-log-into-drawer t)
-(setq org-modules (quote (org-bbdb org-bibtex org-gnus org-info org-jsinfo org-irc org-mew org-mhe org-rmail org-vm org-wl org-w3m org-bookmark org-browser-url org-depend org-R org-toc)))
-(setq org-outline-path-complete-in-steps nil)
-(setq org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5))))
-(setq org-refile-use-outline-path t)
-(setq org-remember-default-headline "Tasks")
-(setq org-special-ctrl-k t)
-(setq org-stuck-projects (quote ("+LEVEL=2/-DONE" ("TODO" "NEXT" "NEXTACTION") ("REFERENCE" "ARCHIVE") "")))
-(setq org-use-speed-commands t)
-(setq org-agenda-time-grid (quote ((daily today) "----------------" (800 1000 1200 1400 1600 1800 2000))))
-(setq org-attach-method (quote ln))
-(setq org-clock-into-drawer "LOGBOOK")
-(setq org-completion-use-ido t)
+
+; Set up the summary to use.
+(defun org-summary-todo (n-done n-not-done)
+  "Switch entry to DONE when all subentries are done, to TODO otherwise."
+; turn off logging
+  (let (org-log-done org-log-states) 
+    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+
+;; Add some hooks
+(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+;;;;;
+;; ORG CAPTURE
+;;;;;
+
+;; Capture Templates
+(setq org-capture-templates
+      '(("t" "todo" entry
+	 (file "~/Documents/Org/Refile.org")
+	 "* TODO %?\n  %U\n  %a" :clock-in t :clock-resume t)
+	("n" "note" entry
+	 (file "~/Documents/Org/Refile.org")
+	 "* %?                                                                            :NOTE:\n  %U\n  %a\n  :CLOCK:\n  :END:")
+	("w" "Wiki Award" table-line
+	 (file+headline "~/Documents/Org/Wiki.org" "Wiki Award Winners")
+	 "|%(bnb/workweek-string)|%^{Winner}|%^{Comment}|%^{Award Sent}|" :prepend t )
+	("p" "org-protocol" entry
+	 (file "~/Documents/Org/Refile.org")
+	 "* TODO Review %c\n  %U" :immediate-finish t)))
 
 
+;;;;;
+;; ORG REFILE
+;;;;;
+
+;; Cache the targets for refiling.  This is the best option for me as
+;; I am usually refiling into separate files at a Tasks headline.
+;; Because this rarely changes, caching should be fine.
+(setq org-refile-use-cache t)
+;; Allow refiling into any of the agenda files up to three levels
+;; deep.  Also allow refiling in the same file up to 5 levels deep.
+(setq org-refile-targets (quote 
+			  ((org-agenda-files :maxlevel . 3)
+			   (nil :maxlevel . 5))))
+;; Filenames *must* be first for refiling.
+(setq org-refile-use-outline-path 'file)
+
+
+;;;;;
+;; ORG AGENDA
+;;;;;
+
+;; Display any inherited tags in the agenda line
+(setq org-agenda-show-inherited-tags t)
+
+;; Show the log for items that have been clocked in the day.
+;; C-u l to display full log in agenda.
+(setq org-agenda-log-mode-items '(clock))
+
+;; Agenda clock report parameters (no links, 2 levels deep)
+(setq org-agenda-clockreport-parameter-plist (quote (:link nil :maxlevel 2)))
+
+;; Only show a time grid on today if there is a scheduled task.
+(setq org-agenda-time-grid 
+      (quote ((daily today require-timed) 
+	      "----------------" 
+	      (800 1000 1200 1400 1600 1800 2000))))
+
+;; Setup the various Agenda views
 (setq org-agenda-custom-commands
       (quote (("w" "Tasks waiting on something" tags "WAITING/!"
                ((org-use-tag-inheritance nil)
@@ -161,81 +263,85 @@
                  '(org-agenda-skip-subtree-if 'notregexp "^\\*\\* Organization"))
                 (org-agenda-overriding-header "Set default clocking task with C-u C-u I"))))))
 
+;; Define Stuck projects for the Agenda view
+(setq org-stuck-projects 
+      (quote 
+       ("+LEVEL=2/-DONE" ("TODO" "NEXT" "NEXTACTION") ("REFERENCE" "ARCHIVE") "")))
+
+;;;;;
+;; Org EXPORT
+;;;;;
+
+;; Put the images inline with an <img> tag.
+(setq org-export-html-inline-images t)
+
+;; Convert any LaTeX fragments to images for export.
+(setq org-export-with-LaTeX-fragments t)
+
+
+;;;;;
+;; ORG LOG
+;;;;;
+
+;; Set a note when logging an item done.
+(setq org-log-done (quote note))
+(setq org-log-into-drawer t)
+;; Separate drawers for clocking and logs
+(setq org-drawers '("PROPERTIES" "LOGBOOK" "CLOCK"))
+
+
+;;;;;
+;; ORG CLOCKING
+;;;;;
 
 ;; Resume clocking tasks when emacs is restarted.
 (org-clock-persistence-insinuate)
-;; Maybe too long?
+;; Setup clocking history
 (setq org-clock-history-length 28)
 ;; Resume clocking task on clock-in if the clock is open
 (setq org-clock-in-resume t)
+
+;; Change state to NEXT when clocking in a TODO item
 (setq org-clock-in-switch-to-state (quote bnb/clock-in-to-next))
-;; Separate drawers for clocking and logs
-(setq org-drawers '("PROPERTIES" "LOGBOOK" "CLOCK"))
+;; Clock into the CLOCK drawer
 (setq org-clock-into-drawer "CLOCK")
+;; Remove any 0 time clocks.
 (setq org-clock-out-remove-zero-time-clocks t)
+;; Clock out if the item is marked done
 (setq org-clock-out-when-done t)
+;; Keep clock history across emacs sessions.
 (setq org-clock-persist 'history)
+;; Automatically resolve open clocks.
 (setq org-clock-auto-clock-resolution 'when-no-clock-is-running)
+;; Include the clocking task in a clock report
 (setq org-clock-report-include-clocking-task t)
 
-(setq bnb/keep-clock-running nil)
-
+;; Clock into default task or show a list of possible default tasks
 (defun bnb/clock-in ()
   (interactive)
-  (setq bnb/keep-clock-running t)
   (if (marker-buffer org-clock-default-task)
       (unless (org-clock-is-active)
 	(bnb/clock-in-default-task))
-    (unless (marker-buffer org-clock-default-task)
-      (org-agenda nil "c"))))
+    (org-agenda nil "c")))
 
+;; Clock out if clock is active
 (defun bnb/clock-out ()
   (interactive)
-  (setq bnb/keep-clock-running nil)
   (when (org-clock-is-active)
     (org-clock-out)))
 
+;; Clock into the default task
 (defun bnb/clock-in-default-task ()
   (save-excursion
     (org-with-point-at org-clock-default-task
       (org-clock-in))))
 
-(defun bnb/clock-out-maybe ()
-  (when (and bnb/keep-clock-running (not org-clock-clocking-in) (marker-buffer org-clock-default-task))
-    (bnb/clock-in-default-task)))
-
-(add-hook 'org-clock-out-hook 'bnb/clock-out-maybe 'append)
-
-(require 'org-id)
-(defun bnb/clock-in-task-by-id (id)
-  "Clock in a task by ID"
-  (save-restriction
-    (widen)
-    (org-with-point-at (org-id-find id 'marker)
-      (org-clock-in nil))))
-
-(defun bnb/clock-in-interrupted-task ()
-  "Clock in the interrupted task if there is one"
-  (interactive)
-  (let ((clock-in-to-task))
-    (if (org-clock-is-active)
-	(when (marker-buffer org-clock-interrupted-task)
-	  (if (equal org-clock-interrupted-task org-clock-hd-marker)
-	      (setq clock-in-to-task (cadr org-clock-histor))
-	    (setq clock-in-to-task org-clock-interrupted-task))))
-    (if clock-in-to-task
-	(org-with-point-at clock-in-to-task
-	  (org-clock-in nil))
-      (org-clock-out))))
-
-(setq org-agenda-log-mode-items '(clock))
-
-
+;; Comment inline
 (defun bnb/clock-in-to-next (kw)
   "Switch task from TODO to NEXT when clocking in.
 Skips remember tasks and tasks with subtasks"
   (if (and (string-equal kw "TODO")
-	   (not (string-equal (buffer-name) "*Remember*")))
+	   (not org-capture-mode))
       (let ((subtree-end (save-excursion (org-end-of-subtree t)))
 	    (has-subtask nil))
 	(save-excursion
@@ -248,79 +354,31 @@ Skips remember tasks and tasks with subtasks"
 	(when (not has-subtask)
 	  "NEXT"))))
 
-(setq org-clock-in-switch-to-state (quote bnb/clock-in-to-next))
-
 (setq org-time-stamp-rounding-minutes (quote (1 15)))
 
-; Agenda clock report parameters (no links, 2 levels deep)
-(setq org-agenda-clockreport-parameter-plist (quote (:link nil :maxlevel 2)))
+;; Set default column view headings: Task Effort Clock_Summary
+(setq org-columns-default-format 
+      "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
+;; global effort estimate values
+(setq org-global-properties 
+      (quote (("Effort_ALL" . 
+	       "0:10 0:30 1:00 2:00 3:00 4:00 5:00 6:00 7:00 8:00"))))
+;;;;;
+;; ORG MODULES
+;;;;;
+(setq org-modules (quote (org-bbdb org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m org-bookmark)))
 
-; Set default column view headings: Task Effort Clock_Summary
-(setq org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
-; global effort estimate values
-(setq org-global-properties (quote (("Effort_ALL" . "0:10 0:30 1:00 2:00 3:00 4:00 5:00 6:00 7:00 8:00"))))
-
-(setq org-hide-leading-stars t)
-
-(setq org-odd-levels-only nil)
-
-(setq org-cycle-separator-lines 0)
-
-(setq org-reverse-note-order nil)
-
-(setq org-insert-heading-respect-content t)
-
-(setq org-modules (quote (org-bbdb org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m)))
+;;;;;
+;; ORG HABIT
+;;;;;
 (setq org-global-properties (quote (("STYLE_ALL" . "habit"))))
 (setq org-habit-graph-column 50)
 
 
-(setq global-auto-revert-mode t)
 
-
-(setq org-use-speed-commands t)
-(setq org-speed-commands-user (quote (("0" . delete-window)
-				      ("1" . delete-other-windows)
-				      ("2" . split-window-vertically)
-				      ("3" . split-window-horizontally)
-				      ("h" . hide-other)
-				      ("k" . org-kill-node-or-show-branches)
-				      ("r" . org-reveal)
-				      ("s" . org-save-all-org-buffers)
-				      ("z" . org-add-note))))
-
-
-(add-to-list 'Info-default-directory-list "~/.emacs.d/org/org-mode/doc/org")
-
-(run-at-time "00:59" 3600 'org-save-all-org-buffers)
-;; end-EXPERIMENTAL
-
-
-
-; Make TAB the yas trigger key in the org-mode-hook and turn on flyspell mode
-(defun yas/org-very-safe-expand ()
-  (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
-(add-hook 'org-mode-hook
-	  (lambda ()
-	    ;; Keybindings
-	    (local-set-key "\M-I" 'org-toggle-iimage-in-org)
-	    ;; yasnippet
-	    (make-variable-buffer-local 'yas/trigger-key)
-	    (setq yas/trigger-key [tab])
-	    (add-to-list 'org-tab-first-hook 'yas/org-very-safe-expand)
-	    (yas/minor-mode)
-	    ;; Turn on flyspell mode
-					;(flyspell-mode 1)
-	    ))
-
-; Set up the summary to use.
-(defun org-summary-todo (n-done n-not-done)
-  "Switch entry to DONE when all subentries are done, to TODO otherwise."
-; turn off logging
-  (let (org-log-done org-log-states) 
-    (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-
-;; Org-protocol
+;;;;;
+;; ORG PROTOCOL
+;;;;;
 (defun bnb/screenshot-protocol-handler-function (fname)
   "Process an org-protocol://store-screenshot:// style url
 and store the file path as an org link.  Also pushes the URL to the `kill-ring'."
@@ -343,7 +401,12 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
          :kill-client t))
       )
 
+;;;;;
+;; ORG IIMAGE
+;;;;;
+
 (require 'iimage)
+;; Fix the links to like windows paths.
 (add-to-list 'iimage-mode-image-regex-alist
 	     (cons (concat "\\[\\[file:[a-zA-Z]:?\\(~?" 
 			   (concat "[-+./_0-9a-zA-Z%]+\\."
@@ -357,41 +420,28 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
   "Change %20 in the filename back into proper spaces"
   (ad-set-arg 0 (replace-regexp-in-string "%20" " " (ad-get-arg 0))))
 
-(defun org-toggle-iimage-in-org ()
-  (interactive)
-  (let ((turning-on (not iimage-mode)))
-    (set-face-underline-p 'org-link (not turning-on))
-    (iimage-mode (or turning-on 0))))
 
-
-;; Add some hooks
-(add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
-
-;; (add-hook 'org-mode-hook 'flyspell-mode)
-(defadvice ispell-command-loop (before ispell-reverse-miss-list activate)
-  "reverse the first argument to ispell-command-loop"
-  (ad-set-arg 0 (reverse (ad-get-arg 0))))
-
-;; Enable remember with org-mode
-;;(org-remember-insinuate)
-
-;; Org Feeds
+;;;;;
+;; ORG FEEDS
+;;;;;
 (require 'org-feed)
+
+;; Setup feeds for ReQall, Reader and Foxmarks.
 (setq org-feed-alist
       '(("ReQall"
          "http://www.reqall.com/user/feeds/rss/ef1f7fd093ca0a7d98ba5758d64b00775c47ccf3"
-         "c:/Documents and Settings/bnbeckwi/My Documents/Org/Tasks.org"
-         "ReQall entries")
+         "c:/Users/bnbeckwi/Documents/Org/Work.org"
+         "Tasks")
         ("Reader Starred"
          "http://www.google.com/reader/public/atom/user%2F18264969865616704417%2Fstate%2Fcom.google%2Fstarred"
-         "c:/Documents and Settings/bnbeckwi/My Documents/Org/Refile.org"
+         "c:/Users/bnbeckwi/Documents/Org/GoogleReader.org"
          "Google Reader Starred Items"
          :template "\n* %h\n  %U\n#+BEGIN_HTML \n %description\n#+END_HTML \n  %a\n"
          :parse-feed org-feed-parse-atom-feed
          :parse-entry org-feed-parse-atom-entry)
         ("Foxmarks"
          "http://share.xmarks.com/folder/rss/D5rnYUy6cN"
-         "c:/Documents and Settings/bnbeckwi/My Documents/Org/Refile.org"
+         "c:/Users/bnbeckwi/Documents/Org/Bookmarks.org"
          "Bookmarks to Sort"
          :formatter bnb/format-xmarks-entries
          )
@@ -456,23 +506,5 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
           (replace-match tmp t t))))
       (buffer-string))))
     
-
-;; Anything integration
-(defvar org-remember-anything
-  '((name . "Org Remember")
-    (candidates . (lambda () (mapcar 'car org-remember-templates)))
-    (action . (lambda (name)
-                (let* ((orig-template org-remember-templates)
-                       (org-remember-templates
-                        (list (assoc name orig-template))))
-                  (call-interactively 'org-remember))))))
-
-
-;; Org-Babel setup
-(require 'ob)
-(require 'ob-lob)
-(require 'ob-sqlite)
-(require 'ob-sh)
-(setq org-babel-sh-command "cmd /k")
 
 (provide 'org-config)
