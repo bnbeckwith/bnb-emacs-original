@@ -8,7 +8,6 @@
             anything-c-source-kill-ring
             anything-c-source-occur
 	    anything-c-source-org-headline
-            org-remember-anything
 	    anything-c-source-lacarte
             ))
 
