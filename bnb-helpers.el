@@ -1,3 +1,4 @@
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Keeping emacs running even when "exiting"
 ;; http://emacs-fu.blogspot.com/2009/03/windows-and-daemons.html 
@@ -10,12 +11,11 @@
 (global-set-key (kbd "C-x C-c") 'bnb/exit)
 
 (defvar bnb/really-kill-emacs-hooks)
-(add-hook 'bnb/really-kill-emacs-hooks 'org-save-all-org-buffers 'append)
 
 (defun bnb/really-kill-emacs ()
   (interactive)
   (setq bnb/really-kill-emacs t)
-;  (run-hooks 'bnb/really-kill-emacs-hooks)
+  (run-hooks 'bnb/really-kill-emacs-hooks)
   (kill-emacs))
 
 (defvar bnb/really-kill-emacs nil)
@@ -25,6 +25,20 @@
       ad-do-it)
     (bnb/exit))
 
+(defun bnb/workweek ()
+  (interactive)
+  (let* ((days (time-to-day-in-year (current-time)))
+	 (weeks (/ days 7))
+	 (left (% days 7)))
+    (if (= 0 left)
+	weeks
+      (+ 1 weeks))))
+    
+(defun bnb/workweek-string ()
+  (interactive)
+  (concat "WW" 
+	  (number-to-string
+	   (bnb/workweek))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Toggle full-screen emacs
@@ -43,7 +57,8 @@
     (goto-char (point-min))
     (while (re-search-forward "TODO" nil t)
       (let ((overlay (make-overlay (- (point) 5) (point))))
-	(overlay-put overlay 'before-string (propertize (format "A")
-							'display '(left-fringe right-triangle)))))))
+	(overlay-put overlay 'before-string 
+		     (propertize (format "A")
+				 'display '(left-fringe right-triangle)))))))
 
 (provide 'bnb-helpers)
