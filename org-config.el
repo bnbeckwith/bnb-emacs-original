@@ -168,6 +168,9 @@
 ;; Add some hooks
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
+;; Turn off task priorities
+(setq org-enable-priority-commands nil)
+
 ;;;;;
 ;; ORG CAPTURE
 ;;;;;
@@ -341,7 +344,7 @@
   "Switch task from TODO to NEXT when clocking in.
 Skips remember tasks and tasks with subtasks"
   (if (and (string-equal kw "TODO")
-	   (not org-capture-mode))
+	   (not (and (boundp 'org-capture-mode) org-capture-mode)))
       (let ((subtree-end (save-excursion (org-end-of-subtree t)))
 	    (has-subtask nil))
 	(save-excursion
