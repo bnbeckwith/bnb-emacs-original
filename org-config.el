@@ -248,14 +248,10 @@
                ((org-agenda-overriding-header "Notes")))
               ("n" "Next" tags-todo "-WAITING-CANCELED/!NEXT"
                ((org-agenda-overriding-header "Next Tasks")))
-              ("p" "Projects" tags-todo "LEVEL=2-REFILE|LEVEL=1+REFILE/!-DONE-CANCELED"
-               ((org-agenda-skip-function 'bh/skip-non-projects)
-                (org-agenda-overriding-header "Projects")))
-              ("o" "Other (Non-Project) tasks" tags-todo "LEVEL=2-REFILE|LEVEL=1+REFILE/!-DONE-CANCELED"
-               ((org-agenda-skip-function 'bh/skip-projects)
-                (org-agenda-overriding-header "Other Non-Project Tasks")))
               ("A" "Tasks to be Archived" tags "LEVEL=2-REFILE/DONE|CANCELED"
                ((org-agenda-overriding-header "Tasks to Archive")))
+	      ("P" "Agenda (including Personal Files)" agenda ""
+	       ((org-agenda-files (append org-agenda-files (list "E:/org/Personal.org")))))
               ("h" "Habits" tags "STYLE=\"habit\""
                ((org-agenda-todo-ignore-with-date nil)
                 (org-agenda-todo-ignore-scheduled nil)
