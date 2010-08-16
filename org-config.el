@@ -183,7 +183,10 @@
 	("n" "note" entry
 	 (file "~/Documents/Org/Refile.org")
 	 "* %?                                                                            :NOTE:\n  %U\n  %a\n  :CLOCK:\n  :END:")
-	("w" "Wiki Award" table-line
+	("w" "Weekly Report" entry
+	 (file+headline "~/Documents/Org/WeeklyReports.org" "2010")
+	 "* %(bnb/workweek-string) \n %? \n %i")
+	("a" "Wiki Award" table-line
 	 (file+headline "~/Documents/Org/Wiki.org" "Wiki Award Winners")
 	 "|%(bnb/workweek-string)|%^{Winner}|%^{Comment}|%^{Award Sent}|" :prepend t )
 	("p" "org-protocol" entry
