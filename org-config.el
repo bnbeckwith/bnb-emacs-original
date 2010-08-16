@@ -372,7 +372,7 @@ Skips remember tasks and tasks with subtasks"
 ;; ORG HABIT
 ;;;;;
 (setq org-global-properties (quote (("STYLE_ALL" . "habit")
-				    ("Effort_ALL" . "0:10 0:30 1:00 2:00 3:00 4:00 5:00 6:00 7:00 8:00"))))
+				    ("Effort_ALL" . "0:10 0:30 1:00 2:00 3:00 4:00 8:00 12:00 16:00 20:00"))))
 (setq org-habit-graph-column 50)
 
 
