@@ -107,7 +107,6 @@
 				      ("2" . split-window-vertically)
 				      ("3" . split-window-horizontally)
 				      ("h" . hide-other)
-				      ("k" . org-kill-node-or-show-branches)
 				      ("R" . org-reveal)
 				      ("s" . org-save-all-org-buffers)
 				      ("z" . org-add-note)
@@ -189,9 +188,10 @@
 	("a" "Wiki Award" table-line
 	 (file+headline "~/Documents/Org/Wiki.org" "Wiki Award Winners")
 	 "|%(bnb/workweek-string)|%^{Winner}|%^{Comment}|%^{Award Sent}|" :prepend t )
-	("p" "org-protocol" entry
-	 (file "~/Documents/Org/Refile.org")
-	 "* TODO Review %c\n  %U" :immediate-finish t)))
+	("p" "personal" entry
+	 (file "E:/org/Personal.org")
+	 "* TODO %?\n %U\n" :clock-in t :clock-resume t)))
+
 
 
 ;;;;;
@@ -250,8 +250,12 @@
                ((org-agenda-overriding-header "Next Tasks")))
               ("A" "Tasks to be Archived" tags "LEVEL=2-REFILE/DONE|CANCELED"
                ((org-agenda-overriding-header "Tasks to Archive")))
-	      ("P" "Agenda (including Personal Files)" agenda ""
-	       ((org-agenda-files (append org-agenda-files (list "E:/org/Personal.org")))))
+	      ("z" "Agenda (including Personal Files)" agenda ""
+	       ((org-agenda-files (append org-agenda-files (list "E:/org/Personal.org")))
+		(org-agenda-ndays 7)
+		(org-agenda-include-diary)))
+	      ("P" "Personal Tasks Todo" tags-todo "-DONE-CANCELED-SOMEDAY"
+	       ((org-agenda-files (list "E:/org/Personal.org"))))
               ("h" "Habits" tags "STYLE=\"habit\""
                ((org-agenda-todo-ignore-with-date nil)
                 (org-agenda-todo-ignore-scheduled nil)
@@ -435,14 +439,14 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
          "Tasks")
         ("Reader Starred"
          "http://www.google.com/reader/public/atom/user%2F18264969865616704417%2Fstate%2Fcom.google%2Fstarred"
-         "c:/Users/bnbeckwi/Documents/Org/GoogleReader.org"
+         "e:/org/GoogleReader.org"
          "Google Reader Starred Items"
          :template "\n* %h\n  %U\n#+BEGIN_HTML \n %description\n#+END_HTML \n  %a\n"
          :parse-feed org-feed-parse-atom-feed
          :parse-entry org-feed-parse-atom-entry)
         ("Foxmarks"
          "http://share.xmarks.com/folder/rss/D5rnYUy6cN"
-         "c:/Users/bnbeckwi/Documents/Org/Bookmarks.org"
+         "e:/org/Bookmarks.org"
          "Bookmarks to Sort"
          :formatter bnb/format-xmarks-entries
          )
