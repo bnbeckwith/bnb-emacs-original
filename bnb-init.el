@@ -80,13 +80,17 @@
 ;;Auto-save bookmarks
 (setq bookmark-save-flag 1)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;; YASnippet mode
+(require 'yas-config)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Wikipedia (MediaWiki) mode
 (autoload 'wikipedia-mode "wikipedia-mode.el"
   "Major mode for editing documents in Wikipedia markup." t)
 (add-to-list 'auto-mode-alist
              '("wiki\\.pdx\\.intel\\.com" . wikipedia-mode))
-(add-hook 'wikipedia-mode-hook 'orgtbl-mode)
+;(add-hook 'wikipedia-mode-hook 'orgtbl-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Show Paren mode
