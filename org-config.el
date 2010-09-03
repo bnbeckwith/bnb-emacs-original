@@ -27,6 +27,19 @@
 	    ))
 (add-hook 'bnb/really-kill-emacs-hooks 'org-save-all-org-buffers 'append)
 
+;; Setup some global keys
+(global-set-key (kbd "C-c C-t") 'orgtbl-mode)
+
+;;;;;
+;; Overrides
+;;;;; 
+
+;; Use Intel Workweek
+(defadvice org-days-to-iso-week (around bnb/intel-workweek activate)
+  "Fix the ISO workweek to be Intel's idea of Workweek"
+  (setq ad-return-value
+	(+ 1 ad-do-it)))
+
 ;;;;;
 ;; ORG MISCELLANEOUS
 ;;;;;
