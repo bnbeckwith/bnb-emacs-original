@@ -27,10 +27,14 @@
 
 (defun bnb/workweek ()
   (interactive)
-  (let* ((days (time-to-day-in-year (current-time)))
-	 (weeks (/ days 7))
+  (let* ((now (current-time))
+	 (weeks (string-to-number
+		 (format-time-string "%W" now)))
+	 (days (time-to-day-in-year now))
+	 (daynum (string-to-number
+		  (format-time-string "%w" now)))
 	 (left (% days 7)))
-    (if (= 0 left)
+    (if (and (= 0 daynum) (= left 0))
 	weeks
       (+ 1 weeks))))
     

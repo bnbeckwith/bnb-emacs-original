@@ -85,6 +85,10 @@
 (require 'yas-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ledger mode
+(require 'ledger-config)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Wikipedia (MediaWiki) mode
 (autoload 'wikipedia-mode "wikipedia-mode.el"
   "Major mode for editing documents in Wikipedia markup." t)

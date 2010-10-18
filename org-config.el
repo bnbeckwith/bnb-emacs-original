@@ -38,7 +38,7 @@
 (defadvice org-days-to-iso-week (around bnb/intel-workweek activate)
   "Fix the ISO workweek to be Intel's idea of Workweek"
   (setq ad-return-value
-	(+ 1 ad-do-it)))
+	(bnb/workweek)))
 
 ;;;;;
 ;; ORG MISCELLANEOUS
@@ -91,6 +91,10 @@
 
 ;; Insert new heading after the current subtree.
 (setq org-insert-heading-respect-content t)
+
+;; Google Weather
+(add-to-list 'load-path (concat bnb-elisp-dir "google-weather-el/"))
+(require 'org-google-weather)
 
 ;;;;
 ;; ORG KEYS
@@ -154,7 +158,7 @@
               ("WAITING"
                ("WAITING" . t))
               ("SOMEDAY"
-               ("WAITING" . t))
+               ("SOMEDAY" . t))
               (done
                ("WAITING"))
               ("TODO"
@@ -206,10 +210,14 @@
 	 "* TODO %?\n %U\n" :clock-in t :clock-resume t)))
 
 
-
 ;;;;;
 ;; ORG REFILE
 ;;;;;
+
+(defun bnb/refile-to-personal-files ()
+  (interactive)
+  (if (file-exists-p "e:/org/Personal.org")
+      "e:/org/Personal.org"))
 
 ;; Cache the targets for refiling.  This is the best option for me as
 ;; I am usually refiling into separate files at a Tasks headline.
@@ -219,7 +227,8 @@
 ;; deep.  Also allow refiling in the same file up to 5 levels deep.
 (setq org-refile-targets (quote 
 			  ((org-agenda-files :maxlevel . 3)
-			   (nil :maxlevel . 5))))
+			   (nil :maxlevel . 5)
+			   (bnb/refile-to-personal-files :maxlevel . 2))))
 ;; Filenames *must* be first for refiling.
 (setq org-refile-use-outline-path 'file)
 
@@ -264,11 +273,32 @@
               ("A" "Tasks to be Archived" tags "LEVEL=2-REFILE/DONE|CANCELED"
                ((org-agenda-overriding-header "Tasks to Archive")))
 	      ("z" "Agenda (including Personal Files)" agenda ""
-	       ((org-agenda-files (append org-agenda-files (list "E:/org/Personal.org")))
+	       ((org-agenda-files (file-expand-wildcards "E:/org/*.org"))
 		(org-agenda-ndays 7)
 		(org-agenda-include-diary)))
-	      ("P" "Personal Tasks Todo" tags-todo "-DONE-CANCELED-SOMEDAY"
-	       ((org-agenda-files (list "E:/org/Personal.org"))))
+	      ("P" "Personal Tasks Todo" ;tags-todo "-DONE-CANCELED-SOMEDAY"
+	       ((agenda "" ((org-agenda-ndays 10)
+			    (org-agenda-overriding-header "\n== Upcoming Items ==\n")
+	       		    (org-agenda-start-on-weekday nil)
+	       		    (org-agenda-repeating-timestap-show-all t)
+	       		    (org-agenda-entry-types '(:timestamp :sexp))))
+	       	(agenda "" ((org-agenda-ndays 1)
+			    (org-agenda-overriding-header "\n** Due Today **\n")
+	       		    (org-deadline-warning-days 7)
+	       		    (org-agenda-todo-keyword-format "[ ]")
+	       		    (org-agenda-scheduled-leaders '("" ""))
+	       		    (org-agenda-prefix-format "%t%s")))
+	       	(tags-todo "-DRB-SOMEDAY"
+	       	      ((org-agenda-prefix-format "[ ] %T:\t")
+	       	       (org-agenda-sorting-strategy '(tag-up priority-down))
+	       	       (org-agenda-todo-keyword-format "")
+	       	       (org-agenda-overriding-header "\nTasks by Context\n------------------\n"))))
+		((org-agenda-files (file-expand-wildcards "E:/org/*.org"))
+		 (org-agenda-with-colors nil)
+		 (org-agenda-compact-blocks t)
+		 (org-agenda-remove-tags t)
+		 (ps-paper-type 'a4))
+		("E:/org/TODO.pdf"))
               ("h" "Habits" tags "STYLE=\"habit\""
                ((org-agenda-todo-ignore-with-date nil)
                 (org-agenda-todo-ignore-scheduled nil)
@@ -307,7 +337,6 @@
 (setq org-log-into-drawer t)
 ;; Separate drawers for clocking and logs
 (setq org-drawers '("PROPERTIES" "LOGBOOK" "CLOCK"))
-
 
 ;;;;;
 ;; ORG CLOCKING
@@ -383,7 +412,19 @@ Skips remember tasks and tasks with subtasks"
 ;;;;;
 ;; ORG MODULES
 ;;;;;
-(setq org-modules (quote (org-bbdb org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m org-bookmark)))
+(setq org-modules (quote (org-bbdb org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m org-bookmark org-crypt)))
+
+;;;;;
+;; ORG CRYPT
+;;;;;
+; To encrypt a block, just add a "crypt" tag and save the file.
+; To decrypt, use org-decrypt-entry or org-decrypt-entries
+(require 'org-crypt)
+; This was included in the org-modules
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+; Key to use for encryption
+(setq org-crypt-key "F0F919A1")
 
 ;;;;;
 ;; ORG HABIT
@@ -391,8 +432,6 @@ Skips remember tasks and tasks with subtasks"
 (setq org-global-properties (quote (("STYLE_ALL" . "habit")
 				    ("Effort_ALL" . "0:10 0:30 1:00 2:00 3:00 4:00 8:00 12:00 16:00 20:00"))))
 (setq org-habit-graph-column 50)
-
-
 
 ;;;;;
 ;; ORG PROTOCOL
