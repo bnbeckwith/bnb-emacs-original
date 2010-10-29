@@ -14,10 +14,20 @@
 ;; 	("^pdf$" "." "SumatraPDF.exe -reuse-instance %o")
 ;; 	("^html?$" "." "start %o"))))
 
+;; RefTeX
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
+;; Misc Settings
 (setq TeX-auto-untabify t)
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
+
+;; Extra Hooks
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+(add-hook 'LaTeX-mode-hook 'orgtbl-mode)
+
+;; Ask for master file
 (setq-default TeX-master nil)
 
 (provide 'auctex-config)
