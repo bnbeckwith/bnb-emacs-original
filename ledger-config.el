@@ -6,6 +6,6 @@
 				 "ledger/lisp/")))
 (add-to-list 'load-path bnb/ledgerpath)
 
-(require 'ledger)
+(autoload 'ledger "ledger" "Command-line accounting" t)
 
 (provide 'ledger-config)
