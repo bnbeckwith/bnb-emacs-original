@@ -92,6 +92,12 @@
 ;; Insert new heading after the current subtree.
 (setq org-insert-heading-respect-content t)
 
+;; Startup with content showing
+(setq org-startup-folded 'content)
+
+;; Hidestars globally
+(setq org-hide-leading-stars t)
+
 ;; Google Weather
 (add-to-list 'load-path (concat bnb-elisp-dir "google-weather-el/"))
 (require 'org-google-weather)
