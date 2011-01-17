@@ -23,7 +23,7 @@
   "Only kill emacs if a prefix is set"
   (if bnb/really-kill-emacs
       ad-do-it)
-    (bnb/exit))
+    (iconify-frame))
 
 (defun bnb/workweek ()
   (interactive)

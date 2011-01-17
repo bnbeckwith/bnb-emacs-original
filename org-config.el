@@ -280,15 +280,15 @@
                ((org-agenda-overriding-header "Tasks to Archive")))
 	      ("z" "Agenda (including Personal Files)" agenda ""
 	       ((org-agenda-files (file-expand-wildcards "E:/org/*.org"))
-		(org-agenda-ndays 7)
+		(org-agenda-span 7)
 		(org-agenda-include-diary)))
 	      ("P" "Personal Tasks Todo" ;tags-todo "-DONE-CANCELED-SOMEDAY"
-	       ((agenda "" ((org-agenda-ndays 10)
+	       ((agenda "" ((org-agenda-span 10)
 			    (org-agenda-overriding-header "\n== Upcoming Items ==\n")
 	       		    (org-agenda-start-on-weekday nil)
 	       		    (org-agenda-repeating-timestap-show-all t)
 	       		    (org-agenda-entry-types '(:timestamp :sexp))))
-	       	(agenda "" ((org-agenda-ndays 1)
+	       	(agenda "" ((org-agenda-span 1)
 			    (org-agenda-overriding-header "\n** Due Today **\n")
 	       		    (org-deadline-warning-days 7)
 	       		    (org-agenda-todo-keyword-format "[ ]")
@@ -495,19 +495,19 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
          "http://www.reqall.com/user/feeds/rss/ef1f7fd093ca0a7d98ba5758d64b00775c47ccf3"
          "c:/Users/bnbeckwi/Documents/Org/Work.org"
          "Tasks")
-        ("Reader Starred"
-         "http://www.google.com/reader/public/atom/user%2F18264969865616704417%2Fstate%2Fcom.google%2Fstarred"
-         "e:/org/GoogleReader.org"
-         "Google Reader Starred Items"
-         :template "\n* %h\n  %U\n#+BEGIN_HTML \n %description\n#+END_HTML \n  %a\n"
-         :parse-feed org-feed-parse-atom-feed
-         :parse-entry org-feed-parse-atom-entry)
-        ("Foxmarks"
-         "http://share.xmarks.com/folder/rss/D5rnYUy6cN"
-         "e:/org/Bookmarks.org"
-         "Bookmarks to Sort"
-         :formatter bnb/format-xmarks-entries
-         )
+        ;; ("Reader Starred"
+        ;;  "http://www.google.com/reader/public/atom/user%2F18264969865616704417%2Fstate%2Fcom.google%2Fstarred"
+        ;;  "e:/org/GoogleReader.org"
+        ;;  "Google Reader Starred Items"
+        ;;  :template "\n* %h\n  %U\n#+BEGIN_HTML \n %description\n#+END_HTML \n  %a\n"
+        ;;  :parse-feed org-feed-parse-atom-feed
+        ;;  :parse-entry org-feed-parse-atom-entry)
+        ;; ("Foxmarks"
+        ;;  "http://share.xmarks.com/folder/rss/D5rnYUy6cN"
+        ;;  "e:/org/Bookmarks.org"
+        ;;  "Bookmarks to Sort"
+        ;;  :formatter bnb/format-xmarks-entries
+        ;;  )
         ))
 
 ;; Update from home (no proxy set)
