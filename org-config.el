@@ -206,7 +206,7 @@
 	 (file "~/Documents/Org/Refile.org")
 	 "* %?                                                                            :NOTE:\n  %U\n  %a\n  :CLOCK:\n  :END:")
 	("w" "Weekly Report" entry
-	 (file+headline "~/Documents/Org/WeeklyReports.org" "2010")
+	 (file+headline "~/Documents/Org/WeeklyReports.org" "2011")
 	 "* %(bnb/workweek-string) \n %? \n %i")
 	("a" "Wiki Award" table-line
 	 (file+headline "~/Documents/Org/Wiki.org" "Wiki Award Winners")
