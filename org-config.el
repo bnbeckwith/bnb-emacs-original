@@ -418,7 +418,7 @@ Skips remember tasks and tasks with subtasks"
 ;;;;;
 ;; ORG MODULES
 ;;;;;
-(setq org-modules (quote (org-bbdb org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m org-bookmark org-crypt)))
+(setq org-modules (quote (org-bbdb org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m org-bookmark org-crypt org-calc)))
 
 ;;;;;
 ;; ORG CRYPT
