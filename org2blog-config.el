@@ -15,6 +15,6 @@
 
 (require 'org2blog)
 
-(add-to-list 'org2blog-sourcecode-langs "elisp")
+(add-to-list 'org2blog/wp-sourcecode-langs "elisp")
 
 (provide 'org2blog-config)
