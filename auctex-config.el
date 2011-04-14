@@ -3,7 +3,8 @@
 ;; Commented for faster load-times
 (load "auctex.el" t)
 (load "preview-latex.el" nil t t)
-(require 'tex-mik)
+(when (eq system-type 'windows-nt)
+  (require 'tex-mik))
 
 ;; Potential settings
 ; (setq TeX-view-style (quote (("^epsf$" "sumatraPDF.exe %f") ("." "yap -1 %dS %d"))))

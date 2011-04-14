@@ -1,6 +1,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My (bnbeckwith) specific customization file
 
+(require 'cl)
+(defvar *emacs-load-start* (current-time))
+
 (setq bnb-elisp-dir "~/elisp/")
 (dolist (f (directory-files bnb-elisp-dir))
   (let ((name (concat bnb-elisp-dir f)))
@@ -13,7 +16,7 @@
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path dotfiles-dir)
 
-(require 'cl)
+
 (require 'saveplace)
 (require 'ffap)
 (require 'uniquify)
@@ -81,7 +84,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Highlighting
-(global-font-lock-mode 1)
+;(global-font-lock-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs Bookmarks
@@ -134,5 +137,10 @@
 ;; Emacs customization from built-in system
 (setq custom-file "~/.emacs.d/custom.el")
 (load-file custom-file)
+
+
+(message "My bnb-emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
+					(- (+ hi lo) (+ (first *emacs-load-start*)
+							(second *emacs-load-start*)))))
 
 (provide 'bnb-init)
