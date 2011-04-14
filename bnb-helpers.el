@@ -5,7 +5,7 @@
 (defun bnb/exit ()
   (interactive)
 ;  Check for a server-buffer before closing the server-buffer
-  (if server-clients
+  (if (functionp 'server-edit)
       (server-edit))
   (make-frame-invisible nil t))
 (global-set-key (kbd "C-x C-c") 'bnb/exit)
