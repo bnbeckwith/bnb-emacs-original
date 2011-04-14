@@ -2,6 +2,13 @@
 ;; My (bnbeckwith) specific customization file
 
 (setq bnb-elisp-dir "~/elisp/")
+(dolist (f (directory-files bnb-elisp-dir))
+  (let ((name (concat bnb-elisp-dir f)))
+    (when (and (file-directory-p name)
+	       (not (equal f ".."))
+	       (not (equal f "." )))
+      (add-to-list 'load-path name))))
+
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path dotfiles-dir)
@@ -53,7 +60,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org2blog
-(require 'org2blog-config)
+;; FIX FIX FIX - Find a way to make this optional
+;;(require 'org2blog-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Anything mode
@@ -82,11 +90,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
 ;; YASnippet mode
-(require 'yas-config)
+;;(require 'yas-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Ledger mode
-(require 'ledger-config)
+;;(require 'ledger-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Wikipedia (MediaWiki) mode
