@@ -148,6 +148,10 @@
 	      (sequence "WAITING(w@/!)" "SOMEDAY(s!)" "|" "CANCELED(c@/!)")
 	      (sequence "OPEN(O)" "|" "CLOSED(C)"))))
 
+;; Manage the global tag list
+(setq org-tag-alist '(("PROJECT" . ?p)))
+		      
+
 (setq org-todo-keyword-faces (quote (("TODO" :foreground "red" :weight bold)
  ("NEXT" :foreground "blue" :weight bold)
  ("DONE" :foreground "forest green" :weight bold)
@@ -312,7 +316,7 @@
                 (org-agenda-todo-ignore-scheduled nil)
                 (org-agenda-todo-ignore-deadlines nil)
                 (org-agenda-overriding-header "Habits")))
-              ("#" "Stuck Projects" tags-todo "LEVEL=2-REFILE|LEVEL=1+REFILE/!-DONE-CANCELED"
+              ("#" "Stuck Projects" tags-todo "LEVEL=2-REFILE+PROJECT|LEVEL=1+REFILE/!-DONE-CANCELED"
                ((org-agenda-skip-function 'bh/skip-non-stuck-projects)
                 (org-agenda-overriding-header "Stuck Projects")))
               ("c" "Select default clocking task" tags "LEVEL=2-REFILE"
