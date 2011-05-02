@@ -61,7 +61,8 @@
     (setq filename 
 	  (concat (make-temp-name (file-name-directory (buffer-file-name))) ".jpg"))
     (call-process "import" nil nil nil filename)
-    (push filename kill-ring)))
+    (kill-new filename)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Toggle full-screen emacs
