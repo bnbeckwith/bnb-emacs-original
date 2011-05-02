@@ -49,6 +49,21 @@
 	   (bnb/workweek))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Take a screenshot
+
+(global-set-key (kbd "<scroll>") 'bnb/screenshot)
+
+(defun bnb/screenshot ()
+  "Take a screenshot and copy the filename to clipboard"
+  (interactive)
+  (if (eq system-type 'windows-nt)
+      (call-process "C:/Program Files (x86)/ScreenshotCaptor/ScreenshotCaptor.exe" nil nil nil "-capture" "activewindow" "-show")
+    (setq filename 
+	  (concat (make-temp-name (file-name-directory (buffer-file-name))) ".jpg"))
+    (call-process "import" nil nil nil filename)
+    (push filename kill-ring)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Toggle full-screen emacs
 (defun bnb/fullscreen (&optional f)
   (interactive)
