@@ -8,7 +8,9 @@
   (if (functionp 'server-edit)
       (server-edit))
   (make-frame-invisible nil t))
-(global-set-key (kbd "C-x C-c") 'bnb/exit)
+
+(when (eq system-type 'windows-nt)
+  (global-set-key (kbd "C-x C-c") 'bnb/exit))
 
 (defvar bnb/really-kill-emacs-hooks)
 
@@ -19,12 +21,14 @@
   (kill-emacs))
 
 (defvar bnb/really-kill-emacs nil)
-(defadvice kill-emacs (around bnb/really-exit activate)
-  "Only kill emacs if a prefix is set"
-  (if bnb/really-kill-emacs
-      ad-do-it)
-    (iconify-frame))
 
+(when (eq system-type 'windows-nt)
+  (defadvice kill-emacs (around bnb/really-exit activate)
+    "Only kill emacs if a prefix is set"
+    (if bnb/really-kill-emacs
+	ad-do-it)
+    (iconify-frame)))
+  
 (defun bnb/workweek ()
   (interactive)
   (let* ((now (current-time))

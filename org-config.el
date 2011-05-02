@@ -213,14 +213,7 @@
 	 "* %?                                                                            :NOTE:\n  %U\n  %a\n  :CLOCK:\n  :END:")
 	("w" "Weekly Report" entry
 	 (file+headline "~/Documents/Org/WeeklyReports.org" "2011")
-	 "* %(bnb/workweek-string) \n %? \n %i")
-	("a" "Wiki Award" table-line
-	 (file+headline "~/Documents/Org/Wiki.org" "Wiki Award Winners")
-	 "|%(bnb/workweek-string)|%^{Winner}|%^{Comment}|%^{Award Sent}|" :prepend t )
-	("p" "personal" entry
-	 (file "E:/org/Personal.org")
-	 "* TODO %?\n %U\n" :clock-in t :clock-resume t)))
-
+	 "* %(bnb/workweek-string) \n %? \n %i")))
 
 ;;;;;
 ;; ORG REFILE
@@ -285,32 +278,33 @@
               ("A" "Tasks to be Archived" tags "LEVEL=2-REFILE/DONE|CANCELED"
                ((org-agenda-overriding-header "Tasks to Archive")))
 	      ("z" "Agenda (including Personal Files)" agenda ""
-	       ((org-agenda-files (file-expand-wildcards "E:/org/*.org"))
-		(org-agenda-span 7)
+	       ((org-agenda-span 7)
 		(org-agenda-include-diary)))
 	      ("P" "Personal Tasks Todo" ;tags-todo "-DONE-CANCELED-SOMEDAY"
-	       ((agenda "" ((org-agenda-span 10)
-			    (org-agenda-overriding-header "\n== Upcoming Items ==\n")
+	       ((tags-todo "+IGNORE"
+			   ((org-agenda-overriding-header "\n== Upcoming Items ==\n")))
+		(agenda "" ((org-agenda-span 14)
 	       		    (org-agenda-start-on-weekday nil)
-	       		    (org-agenda-repeating-timestap-show-all t)
-	       		    (org-agenda-entry-types '(:timestamp :sexp))))
-	       	(agenda "" ((org-agenda-span 1)
-			    (org-agenda-overriding-header "\n** Due Today **\n")
-	       		    (org-deadline-warning-days 7)
-	       		    (org-agenda-todo-keyword-format "[ ]")
-	       		    (org-agenda-scheduled-leaders '("" ""))
-	       		    (org-agenda-prefix-format "%t%s")))
-	       	(tags-todo "-DRB-SOMEDAY"
-	       	      ((org-agenda-prefix-format "[ ] %T:\t")
-	       	       (org-agenda-sorting-strategy '(tag-up priority-down))
-	       	       (org-agenda-todo-keyword-format "")
-	       	       (org-agenda-overriding-header "\nTasks by Context\n------------------\n"))))
-		((org-agenda-files (file-expand-wildcards "E:/org/*.org"))
-		 (org-agenda-with-colors nil)
-		 (org-agenda-compact-blocks t)
-		 (org-agenda-remove-tags t)
-		 (ps-paper-type 'a4))
-		("E:/org/TODO.pdf"))
+	       		    (org-agenda-repeating-timestamp-show-all t)
+	       		    (org-deadline-warning-days 7)))
+		;; (tags-todo "+IGNORE"
+		;; 	   ((org-agenda-overriding-header "\n** Due Today **\n")))
+	       	;; (agenda "" ((org-agenda-span 1)
+	       	;; 	    (org-agenda-todo-keyword-format "[ ]")
+	       	;; 	    (org-agenda-scheduled-leaders '("" ""))
+	       	;; 	    (org-agenda-prefix-format "%t%s")))
+	       	(tags-todo "-DRB-SOMEDAY-REFERENCE-BNBECKWITH"
+			   ((org-agenda-prefix-format "[ ] %T:\t")
+			    (org-agenda-sorting-strategy '(tag-up priority-down))
+			    (org-agenda-todo-keyword-format "")
+			    (org-agenda-overriding-header "\nTasks by Context\n------------------\n"))))
+	       ((ps-number-of-columns 2)
+		(ps-landscape-mode t)
+		(org-agenda-with-colors nil)
+		(org-agenda-compact-blocks t)
+		(org-agenda-remove-tags t)
+		(ps-paper-type 'a4))
+	       ("~/TODO.pdf" "~/TODO.ps"))
               ("h" "Habits" tags "STYLE=\"habit\""
                ((org-agenda-todo-ignore-with-date nil)
                 (org-agenda-todo-ignore-scheduled nil)
@@ -499,7 +493,7 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
 (setq org-feed-alist
       '(("ReQall"
          "http://www.reqall.com/user/feeds/rss/ef1f7fd093ca0a7d98ba5758d64b00775c47ccf3"
-         "c:/Users/bnbeckwi/Documents/Org/Work.org"
+         "~/Documents/Org/Refile.org"
          "Tasks")
         ))
 
