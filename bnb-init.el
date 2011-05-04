@@ -28,6 +28,9 @@
 ; Remove tool bar
 (tool-bar-mode 0)
 
+; Set the title of the frame
+(setq frame-title-format '("%b - %F"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Saving history in emacs
 (setq savehist-additional-variables        ;; also save
