@@ -271,20 +271,16 @@
                 (org-agenda-todo-ignore-deadlines nil)
                 (org-agenda-todo-ignore-scheduled nil)
                 (org-agenda-overriding-header "Tasks to Refile")))
-              ("N" "Notes" tags "NOTE"
-               ((org-agenda-overriding-header "Notes")))
               ("n" "Next" tags-todo "-WAITING-CANCELED/!NEXT"
                ((org-agenda-overriding-header "Next Tasks")))
               ("A" "Tasks to be Archived" tags "LEVEL=2-REFILE/DONE|CANCELED"
                ((org-agenda-overriding-header "Tasks to Archive")))
-	      ("z" "Agenda (including Personal Files)" agenda ""
-	       ((org-agenda-span 7)
-		(org-agenda-include-diary)))
 	      ("P" "Personal Tasks Todo" ;tags-todo "-DONE-CANCELED-SOMEDAY"
 	       ((tags-todo "+IGNORE"
 			   ((org-agenda-overriding-header "\n== Upcoming Items ==\n")))
 		(agenda "" ((org-agenda-span 14)
 	       		    (org-agenda-start-on-weekday nil)
+			    (org-agenda-prefix-format "[ ] %T:\t")
 	       		    (org-agenda-repeating-timestamp-show-all t)
 	       		    (org-deadline-warning-days 7)))
 		;; (tags-todo "+IGNORE"
@@ -297,6 +293,9 @@
 			   ((org-agenda-prefix-format "[ ] %T:\t")
 			    (org-agenda-sorting-strategy '(tag-up priority-down))
 			    (org-agenda-todo-keyword-format "")
+			    (org-agenda-todo-ignore-with-date nil)
+			    (org-agenda-todo-ignore-scheduled nil)
+			    (org-agenda-todo-ignore-deadlines nil)
 			    (org-agenda-overriding-header "\nTasks by Context\n------------------\n"))))
 	       ((ps-number-of-columns 2)
 		(ps-landscape-mode t)
@@ -305,6 +304,11 @@
 		(org-agenda-remove-tags t)
 		(ps-paper-type 'a4))
 	       ("~/TODO.pdf" "~/TODO.ps"))
+	      ("S" "Scoreless" tags-todo "+Score<1"
+               ((org-agenda-todo-ignore-with-date nil)
+                (org-agenda-todo-ignore-scheduled nil)
+                (org-agenda-todo-ignore-deadlines nil)
+                (org-agenda-overriding-header "Scoreless Tasks")))
               ("h" "Habits" tags "STYLE=\"habit\""
                ((org-agenda-todo-ignore-with-date nil)
                 (org-agenda-todo-ignore-scheduled nil)
@@ -412,7 +416,7 @@ Skips remember tasks and tasks with subtasks"
 
 ;; Set default column view headings: Task Effort Clock_Summary
 (setq org-columns-default-format 
-      "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
+      "%80ITEM(Task) %5Score{+} %10Effort(Effort){:} %10CLOCKSUM")
 ;; Effort_ALL is set below in the ORG HABIT section.
 
 ;;;;;
@@ -436,7 +440,8 @@ Skips remember tasks and tasks with subtasks"
 ;; ORG HABIT
 ;;;;;
 (setq org-global-properties (quote (("STYLE_ALL" . "habit")
-				    ("Effort_ALL" . "0:10 0:30 1:00 2:00 3:00 4:00 8:00 12:00 16:00 20:00"))))
+				    ("Effort_ALL" . "0:10 0:30 1:00 2:00 3:00 4:00 8:00 12:00 16:00 20:00")
+				    ("Score_ALL" . "10 5 2 1"))))
 (setq org-habit-graph-column 50)
 
 ;;;;;
