@@ -249,8 +249,8 @@
 ;; C-u l to display full log in agenda.
 (setq org-agenda-log-mode-items '(clock))
 
-;; Agenda clock report parameters (no links, 2 levels deep)
-(setq org-agenda-clockreport-parameter-plist (quote (:link nil :maxlevel 2)))
+;; Agenda clock report parameters (no links, 2 levels deep, skip 0 clocking)
+(setq org-agenda-clockreport-parameter-plist (quote (:link nil :maxlevel 2 :fileskip0 t)))
 
 ;; Only show a time grid on today if there is a scheduled task.
 (setq org-agenda-time-grid 
