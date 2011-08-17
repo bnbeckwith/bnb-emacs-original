@@ -6,7 +6,7 @@
 ; Remove tool bar
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 
-
+ 
 (defvar *emacs-load-start* (current-time))
 
 (setq bnb-elisp-dir "~/elisp/")
