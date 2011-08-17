@@ -335,8 +335,7 @@
 (setq org-export-html-inline-images t)
 
 ;; Convert any LaTeX fragments to images for export.
-(setq org-export-with-LaTeX-fragments t)
-
+(setq org-export-with-LaTeX-fragments "dvipng")
 
 ;;;;;
 ;; ORG LOG
@@ -561,5 +560,13 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
           (replace-match tmp t t))))
       (buffer-string))))
     
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Org-velocity
+
+(require 'org-velocity)
+
+(setq org-velocity-bucket "~/Documents/Org/Notes.org")
+(global-set-key (kbd "C-c v") 'org-velocity-read)
 
 (provide 'org-config)
