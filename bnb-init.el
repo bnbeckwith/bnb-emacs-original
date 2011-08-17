@@ -1,7 +1,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; My (bnbeckwith) specific customization file
 
-(require 'cl)
+; Remove menu bar
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+; Remove tool bar
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+
+
 (defvar *emacs-load-start* (current-time))
 
 (setq bnb-elisp-dir "~/elisp/")
@@ -16,20 +21,17 @@
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path dotfiles-dir)
 
-
+(require 'cl)
 (require 'saveplace)
 (require 'ffap)
 (require 'uniquify)
 (require 'ansi-color)
 (require 'recentf)
 
-; Remove menu bar
-(menu-bar-mode 0)
-; Remove tool bar
-(tool-bar-mode 0)
-
 ; Set the title of the frame
 (setq frame-title-format '("%b - %F"))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Saving history in emacs
@@ -43,6 +45,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BNB specific helper code
 (require 'bnb-helpers)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package integration
+(require 'package-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dired config
@@ -61,10 +67,6 @@
 (require 'ahk-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Org-mode
-(require 'org-config)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org2blog
 ;; FIX FIX FIX - Find a way to make this optional
 ;;(require 'org2blog-config)
@@ -76,6 +78,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auctex
 (require 'auctex-config)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Org-mode
+(require 'org-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WC-mode
@@ -93,14 +99,6 @@
 ;; Emacs Bookmarks
 ;;Auto-save bookmarks
 (setq bookmark-save-flag 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
-;; YASnippet mode
-;;(require 'yas-config)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Ledger mode
-;;(require 'ledger-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Wikipedia (MediaWiki) mode
@@ -127,6 +125,10 @@
 ;; EasyPG
 (require 'epa)
 (epa-file-enable)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Clojure
+(require 'clojure-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; To Consider:
