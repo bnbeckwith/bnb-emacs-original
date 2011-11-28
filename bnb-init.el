@@ -41,6 +41,14 @@
                                            ;; history
 (savehist-mode t)                          ;; Turn on the mode
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+(setq display-time-world-list
+      '(("EST5EDT" "Hudson")
+	("CST6CST" "Iowa")
+	("MST7MST" "FC")
+	("PST8PDT" "DuPont (SC)")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BNB specific helper code
@@ -91,6 +99,11 @@
 ;; Writegood mode
 (require 'writegood-config)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Fullscreen on windows
+(require 'bnb-fullscreen)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Highlighting
 ;(global-font-lock-mode 1)
@@ -137,6 +150,18 @@
 ;;  - autopair
 ;;  - http://github.com/bbatsov/emacs
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Improve stupid pasting from outlook
+;; (defun bnb/win-paste ()
+;;   "Parse the incoming string and make any necessary replacements"
+;;   (let (str (x-get-selection-value))
+;;     (replace-regexp-in-string "" "      - "
+;; 			      (replace-regexp-in-string "•" "    - "
+;; 							(replace-regexp-in-string "o" "  - " str)))))
+
+;; (setq interprogram-paste-function 'bnb/win-paste)
+  
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs customization from built-in system
