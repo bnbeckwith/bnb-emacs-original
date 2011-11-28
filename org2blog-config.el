@@ -6,7 +6,7 @@
 (add-to-list 'load-path (expand-file-name
 			 (concat bnb-elisp-dir "xml-rpc-el/")))
 
-(global-set-key "\C-c2" 'org2blog-mode)
+(global-set-key "\C-c2" 'org2blog/wp-mode)
 
 (setq org2blog/wp-blog-alist
       '(("bnbeckwith"
@@ -16,8 +16,8 @@
 	 :tags-as-categories nil)))
 
 (setq org2blog-keep-new-lines t)
-
 (require 'org2blog)
+(require 'org2blog-autoloads)
 
 (add-to-list 'org2blog/wp-sourcecode-langs "elisp")
 
