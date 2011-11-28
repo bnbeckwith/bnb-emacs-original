@@ -205,10 +205,13 @@
 
 ;; Capture Templates
 (setq org-capture-templates
-      '(("t" "todo" entry
+      '(("t" "Todo" entry
+	 (file "~/Documents/Org/Refile.org")
+	 "* TODO %?\n  %U\n" :clock-in t :clock-resume t)
+	("r" "todo (Remember location)" entry
 	 (file "~/Documents/Org/Refile.org")
 	 "* TODO %?\n  %U\n  %a" :clock-in t :clock-resume t)
-	("n" "note" entry
+	("n" "Note" entry
 	 (file "~/Documents/Org/Refile.org")
 	 "* %?                                                                            :NOTE:\n  %U\n  %a\n  :CLOCK:\n  :END:")
 	("w" "Weekly Report" entry
@@ -275,6 +278,12 @@
                ((org-agenda-overriding-header "Next Tasks")))
               ("A" "Tasks to be Archived" tags "LEVEL=2-REFILE/DONE|CANCELED"
                ((org-agenda-overriding-header "Tasks to Archive")))
+	      ("u" "Upcoming tasks" tags "+SCHEDULED<=\"<+1w>\"-TODO=\"DONE\"|+DEADLINE<=\"<+1w>\"-TODO=\"DONE\""
+	       ((org-agenda-overriding-header "Upcoming tasks")))
+	      ("U" todo "TODO"
+	       ((org-agenda-skip-function
+		 (lambda nil
+		   (org-agenda-skip-entry-if (quote scheduled) (quote deadline))))))
 	      ("P" "Personal Tasks Todo" ;tags-todo "-DONE-CANCELED-SOMEDAY"
 	       ((tags-todo "+IGNORE"
 			   ((org-agenda-overriding-header "\n== Upcoming Items ==\n")))
@@ -317,6 +326,8 @@
               ("#" "Stuck Projects" tags-todo "LEVEL=2-REFILE+PROJECT|LEVEL=1+REFILE/!-DONE-CANCELED"
                ((org-agenda-skip-function 'bh/skip-non-stuck-projects)
                 (org-agenda-overriding-header "Stuck Projects")))
+	      ("z" "Agenda (including Personal Files)" agenda ""
+	       ((org-agenda-files (list "~/Documents/Personal/Org/"))))
               ("c" "Select default clocking task" tags "LEVEL=2-REFILE"
                ((org-agenda-skip-function
                  '(org-agenda-skip-subtree-if 'notregexp "^\\*\\* Organization"))
