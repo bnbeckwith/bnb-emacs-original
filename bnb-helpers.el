@@ -85,4 +85,8 @@
 		     (propertize (format "A")
 				 'display '(left-fringe right-triangle)))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Hippie
+(global-set-key (kbd "M-/") 'hippie-expand)
+
 (provide 'bnb-helpers)
