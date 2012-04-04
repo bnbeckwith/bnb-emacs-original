@@ -75,11 +75,6 @@
 (require 'ahk-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Org2blog
-;; FIX FIX FIX - Find a way to make this optional
-(require 'org2blog-config)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Anything mode
 (require 'bnb-anything-config)
 
