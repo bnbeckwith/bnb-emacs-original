@@ -98,6 +98,9 @@
 ;; Hidestars globally
 (setq org-hide-leading-stars t)
 
+;; Fontify the SRC blocks natively 
+(setq org-src-fontify-natively t)
+
 ;; Google Weather
 (add-to-list 'load-path (concat bnb-elisp-dir "google-weather-el/"))
 ; I had to turn off https to have this work at work.
@@ -216,7 +219,8 @@
 	 "* %?                                                                            :NOTE:\n  %U\n  %a\n  :CLOCK:\n  :END:")
 	("w" "Weekly Report" entry
 	 (file+headline "~/Documents/Org/WeeklyReports.org" "2011")
-	 "* %(bnb/workweek-string) \n %? \n %i")))
+	 "* %(bnb/workweek-string) \n %? \n %i")
+	))
 
 ;;;;;
 ;; ORG REFILE
@@ -519,58 +523,25 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
           '(("no_proxy" . ".*")) ))
     (org-feed-update-all)))
 
-;; Format Xmarks rss entries properly
-;; mainly, this is to ensure that the entries are tagged.
-(defun bnb/format-xmarks-entries (entries)
-  (let (template dlines tmp indent time
-                 v-h v-t v-T v-u v-U v-a
-                 (desc (or (plist-get entry :description) "???"))
-                 )
-    (setq template "* %h      %g\n  %U\n  %description\n  %a\n"
-          dlines (org-split-string desc
-                                   "\n")
-          v-g (concat ":Bookmark:"
-                      (replace-regexp-in-string
-                       "[\s-]" "_"
-                       (replace-regexp-in-string
-                        ",\s*" ":"
-                        (if (string-match
-                             "Tags: \\(.*\\)"
-                             desc)
-                            (concat (match-string-no-properties 1 desc) ":")
-                          ""
-                          ))))
-          v-h (or (plist-get entry :title) (car dlines) "???"  )
-          time (or (if (plist-get entry :pubDate)
-                       (org-read-date t t (plist-get entry :pubDate)))
-                   (current-time))
-          v-t (format-time-string (org-time-stamp-format nil nil) time)
-          v-T (format-time-string (org-time-stamp-format t   nil) time)
-          v-u (format-time-string (org-time-stamp-format nil   t) time)
-          v-U (format-time-string (org-time-stamp-format t     t) time)
-          v-a (if (setq tmp (or (and (plist-get entry :guid-permalink)
-                                     (plist-get entry :guid))
-                                (plist-get entry :link)))
-                  (concat "[[" tmp "]]\n")
-                ""))
-    (with-temp-buffer
-      (insert template)
-      (goto-char (point-min))
-      (while (re-search-forward "%\\([a-zA-Z]+\\)" nil t)
-        (setq name (match-string 1))
-        (cond
-         ((member name '("h" "t" "T" "u" "U" "a" "g"))
-          (replace-match (symbol-value (intern (concat "v-" name))) t t ))
-         ((setq tmp (plist-get entry (intern (concat ":" name))))
-          (save-excursion
-            (save-match-data
-              (beginning-of-line 1)
-              (when (looking-at (concat "^\\([ \t]*\\)%" name "[ \t]*$"))
-                (setq tmp (org-feed-make-indented-block
-                           tmp (org-get-indentation))))))
-          (replace-match tmp t t))))
-      (buffer-string))))
     
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Org-publish for bnbeckwith.com
+(setq org-publish-project-alist
+      '(("org-bnb"  :base-directory "~/bnbeckwith.com/org/"
+	            :base-extension "org"
+		    :publishing-directory "~/bnbeckwith.com/jekyll"
+		    :recursive t
+		    :publishing-function org-publish-org-to-html
+		    :headline-levels 4
+		    :html-extension "md"
+		    :body-only t)
+	("static-bnb" :base-directory "~/bnbeckwith.com/org"
+	              :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
+		      :publishing-directory "~/bnbeckwith.com/jekyll"
+		      :recursive: t
+		      :publishing-function org-publish-attachment)
+	("bnb" :components ("org-bnb" "static-bnb"))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org-velocity
