@@ -86,7 +86,7 @@
 				 'display '(left-fringe right-triangle)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Hippie
+;; Hippie Expand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
 (provide 'bnb-helpers)
