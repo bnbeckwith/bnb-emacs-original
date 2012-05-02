@@ -533,7 +533,7 @@ and store the file path as an org link.  Also pushes the URL to the `kill-ring'.
 		    :recursive t
 		    :publishing-function org-publish-org-to-html
 		    :headline-levels 4
-		    :html-extension "md"
+		    :html-extension "html"
 		    :body-only t)
 	("static-bnb" :base-directory "~/bnbeckwith.com/org"
 	              :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|php"
