@@ -5,9 +5,25 @@
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 ; Remove tool bar
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+; Remove Scroll bars
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+; Setup fringe
+;   -- Show brackets/arrows in right fringe
+(setq indicate-buffer-boundaries 'right) 
+;   -- Show - for empty lines
+(setq indicate-empty-lines t)
 
- 
 (defvar *emacs-load-start* (current-time))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Emacs customization from built-in system
+(setq custom-file "~/.emacs.d/custom.el")
+(load-file custom-file)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Package integration
+(require 'package-config)
 
 (setq bnb-elisp-dir "~/elisp/")
 (dolist (f (directory-files bnb-elisp-dir))
@@ -21,7 +37,8 @@
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path dotfiles-dir)
 
-(require 'cl)
+(eval-when-compile 
+  (require 'cl))
 (require 'saveplace)
 (require 'ffap)
 (require 'uniquify)
@@ -30,8 +47,6 @@
 
 ; Set the title of the frame
 (setq frame-title-format '("%b - %F"))
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Saving history in emacs
@@ -49,14 +64,9 @@
 	("MST7MST" "FC")
 	("PST8PDT" "DuPont (SC)")))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BNB specific helper code
 (require 'bnb-helpers)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Package integration
-(require 'package-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Dired config
@@ -75,15 +85,12 @@
 (require 'ahk-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Anything mode
-(require 'bnb-anything-config)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Auctex
-(require 'auctex-config)
+;; (require 'auctex-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org-mode
+;; Not autoloaded as I use it ALL THE TIME
 (require 'org-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -94,14 +101,10 @@
 ;; Writegood mode
 (require 'writegood-config)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Fullscreen on windows
-;(require 'bnb-fullscreen)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Highlighting
-;(global-font-lock-mode 1)
+(if (eq window-system 'w32)
+    (require 'bnb-fullscreen))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs Bookmarks
@@ -112,8 +115,6 @@
 ;; Wikipedia (MediaWiki) mode
 (autoload 'wikipedia-mode "wikipedia-mode.el"
   "Major mode for editing documents in Wikipedia markup." t)
-(add-to-list 'auto-mode-alist
-             '("wiki\\.pdx\\.intel\\.com" . wikipedia-mode))
 ;(add-hook 'wikipedia-mode-hook 'orgtbl-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -136,7 +137,36 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Clojure
-;(require 'clojure-config)
+(require 'clojure-config)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mark-Multiple
+;; (require 'mark-more-like-this)	  
+;; (require 'inline-string-rectangle)
+(global-set-key (kbd "C-x r t") 'inline-string-rectangle)
+(global-set-key (kbd "C-M-m") 'mark-more-like-this) ; like the other two, but takes an argument (negative is previous)
+(global-set-key (kbd "C-*") 'mark-all-like-this)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Multiple cursors.el
+;;(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-C") 'mc/edit-lines)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Expand-region
+;;(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ace-Jump-mode
+;(require 'ace-jump-mode)
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; To Consider:
@@ -144,7 +174,7 @@
 ;;  - hl-line
 ;;  - autopair
 ;;  - http://github.com/bbatsov/emacs
-
+;;  - Project-mode https://github.com/psyllo/emacsenations/wiki/project-mode.el-Quick-Start
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Improve stupid pasting from outlook
@@ -159,10 +189,8 @@
   
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Emacs customization from built-in system
-(setq custom-file "~/.emacs.d/custom.el")
-(load-file custom-file)
-
+;; Server Code
+(server-start)
 
 (message "My bnb-emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
 					(- (+ hi lo) (+ (first *emacs-load-start*)
