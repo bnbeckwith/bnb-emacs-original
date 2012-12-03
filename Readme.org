@@ -1,0 +1,4 @@
+* bnbeckwith Emacs configuration
+
+  This is my current set of emacs configuration files.  Consider it a
+  work in progress.
