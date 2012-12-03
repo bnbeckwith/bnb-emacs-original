@@ -12,4 +12,5 @@
     ;; would fail for 'foo.txt' in the example above.
     (mapc #'find-file (mapcar #'expand-file-name (eshell-flatten-list (reverse args))))))
 
+
 (provide 'eshell-config)
