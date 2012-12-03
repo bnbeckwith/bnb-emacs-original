@@ -7,9 +7,10 @@
 ;  Check for a server-buffer before closing the server-buffer
   (if (functionp 'server-edit)
       (server-edit))
-  (make-frame-invisible nil t))
+  (iconify-frame))
 
-(when (eq system-type 'windows-nt)
+;; Don't exit on windows with a keystroke.
+(when (eq window-system 'w32)
   (global-set-key (kbd "C-x C-c") 'bnb/exit))
 
 (defvar bnb/really-kill-emacs-hooks)
@@ -50,20 +51,20 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Take a screenshot
+(when (eq window-system 'w32)
+  (global-set-key (kbd "<scroll>") 'bnb/screenshot)
 
-(global-set-key (kbd "<scroll>") 'bnb/screenshot)
-
-(defun bnb/screenshot ()
-  "Take a screenshot and copy the filename to clipboard"
-  (interactive)
-  (if (eq system-type 'windows-nt)
-      (call-process "C:/Program Files (x86)/ScreenshotCaptor/ScreenshotCaptor.exe" nil nil nil "-capture" "activewindow" "-show")
-    (setq filename 
-	  (concat (make-temp-name (file-name-directory (buffer-file-name))) ".jpg"))
-    (call-process "import" nil nil nil filename)
-    (kill-new filename)))
-
-
+  (defun bnb/screenshot ()
+    "Take a screenshot and copy the filename to clipboard"
+    (interactive)
+    (if (eq system-type 'windows-nt)
+	(call-process "C:/Program Files (x86)/ScreenshotCaptor/ScreenshotCaptor.exe" nil nil nil "-capture" "activewindow" "-show")
+      (setq filename 
+	    (concat (make-temp-name (file-name-directory (buffer-file-name))) ".jpg"))
+      (call-process "import" nil nil nil filename)
+      (kill-new filename)))
+)
+  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Toggle full-screen emacs
 (defun bnb/fullscreen (&optional f)
@@ -88,5 +89,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hippie Expand
 (global-set-key (kbd "M-/") 'hippie-expand)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Fix docview on windows
+(if (eq window-system 'w32)
+    (setq doc-view-ghostscript-program
+	  "C:/Program Files (x86)/gs/gs9.02/bin/gswin32c.exe"))
 
 (provide 'bnb-helpers)
