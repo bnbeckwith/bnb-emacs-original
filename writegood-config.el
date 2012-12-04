@@ -1,9 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; WC-mode
 
-(add-to-list 'load-path (expand-file-name
-			 (concat bnb-elisp-dir "writegood-mode/")))
-
 (autoload 'writegood-mode "writegood-mode" "Bad writing checker" t)
 ;;(require 'writegood-mode)
 

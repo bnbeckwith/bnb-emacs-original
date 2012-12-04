@@ -83,13 +83,6 @@
 ;; Fontify the SRC blocks natively
 (setq org-src-fontify-natively t)
 
-;; DELETE THIS SECTION
-;; ;; Google Weather
-;; (add-to-list 'load-path (concat bnb-elisp-dir "google-weather-el/"))
-;; ; I had to turn off https to have this work at work.
-;; (setq google-weather-use-https nil)
-;; (require 'org-google-weather)
-
 ;;;;
 ;; ORG KEYS
 ;;;;

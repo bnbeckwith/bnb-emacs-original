@@ -23,19 +23,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package integration
-(require 'package-config)
-
-(setq bnb-elisp-dir "~/elisp/")
-(dolist (f (directory-files bnb-elisp-dir))
-  (let ((name (concat bnb-elisp-dir f)))
-    (when (and (file-directory-p name)
-	       (not (equal f ".."))
-	       (not (equal f "." )))
-      (add-to-list 'load-path name))))
-
-(setq dotfiles-dir (file-name-directory
-                    (or (buffer-file-name) load-file-name)))
-(add-to-list 'load-path dotfiles-dir)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 (eval-when-compile 
   (require 'cl))
